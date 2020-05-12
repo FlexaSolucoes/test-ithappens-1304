@@ -1,0 +1,21 @@
+
+CREATE TABLE tipomovimento (
+tipomovimento_ID        integer IDENTITY NOT NULL,
+tipomovimento_descricao varchar(50),
+tipomovimento_entsai    integer    ,-- 0 -> Entrada , 1 -> Saida
+CONSTRAINT PK_tipomovimento PRIMARY KEY CLUSTERED 
+(
+	tipomovimento_ID ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+);
+GO
+CREATE UNIQUE NONCLUSTERED INDEX id_tipomovimento_000 ON tipomovimento
+(
+	tipomovimento_descricao ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO
+CREATE UNIQUE NONCLUSTERED INDEX idtipo_movimento_001 ON tipomovimento
+(
+	tipomovimento_entsai ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+GO

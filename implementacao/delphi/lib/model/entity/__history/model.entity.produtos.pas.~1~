@@ -1,0 +1,40 @@
+unit model.entity.produtos;
+
+interface
+
+uses
+  System.SysUtils                     ,
+  System.Classes                      ,
+  System.Json                         ,
+  System.Variants                     ,
+  System.Generics.Collections         ,
+  Generics.Collections                ,
+  Graphics                            ,
+  Controls                            ,
+  StdCtrls                            ,
+  Mask                                ,
+  ExtCtrls                            ;
+
+  type Tprodutos = class
+  private
+    { Private declarations }
+    FProduto_ID           : Integer;
+    FProduto_descricao    : String ;
+    FProduto_codigobarras : String ;
+    FGrupo_id             : Integer;
+    FProduto_valorcusto   : Double ;
+    FProduto_valorvenda   : Double ;
+  public
+    { Public declarations }
+    property Produto_ID           : Integer read FProduto_ID            write FProduto_ID          ;
+    property Produto_descricao    : String  read FProduto_descricao     write FProduto_descricao   ;
+    property Produto_codigobarras : String  read FProduto_codigobarras  write FProduto_codigobarras;
+    property Grupo_id             : Integer read FGrupo_id              write FGrupo_id            ;
+    property Produto_valorcusto   : Double  read FProduto_valorcusto    write FProduto_valorcusto  ;
+    property Produto_valorvenda   : Double  read FProduto_valorvenda    write FProduto_valorvenda  ;
+  end;
+
+implementation
+
+end.
+

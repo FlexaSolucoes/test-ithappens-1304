@@ -1,0 +1,19 @@
+unit Model.Conexao.SQLServer;
+
+interface
+
+uses Model.Conecao.Interfaces;
+
+TModelConexaoSQLServer = class(TInterfacedObject,IModelConexao)
+private
+  { private declarations }
+protected
+  { protected declarations }
+public
+  { public declarations }
+
+published
+  { published declarations }
+end;
+
+end.

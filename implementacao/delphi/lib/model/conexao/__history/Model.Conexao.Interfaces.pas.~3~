@@ -1,0 +1,16 @@
+unit Model.Conexao.Interfaces;
+
+interface
+
+type
+   IModelConexao = interface
+       function Connection : TCustomConnection;
+   end;
+
+   IModelQuery = interface
+     function Query : TDataSet;
+   end;
+
+implementation
+
+end.

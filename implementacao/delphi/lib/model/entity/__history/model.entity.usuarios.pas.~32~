@@ -1,0 +1,170 @@
+unit model.entity.usuarios;
+
+interface
+
+uses
+  System.SysUtils                     ,
+  System.Classes                      ,
+  System.Json                         ,
+  System.Variants                     ,
+  System.Generics.Collections         ,
+  Generics.Collections                ,
+  Graphics                            ,
+  Controls                            ,
+  StdCtrls                            ,
+  Mask                                ,
+  ExtCtrls                            ,
+  REST.JSON                           ,
+  uSCPrincipal                        ,
+  Model.Patterns.functions            ,
+  FireDAC.Stan.Intf                   ,
+  FireDAC.Stan.Option                 ,
+  FireDAC.Stan.Param                  ,
+  FireDAC.Stan.Error                  ,
+  FireDAC.DatS                        ,
+  FireDAC.Phys.Intf                   ,
+  FireDAC.DApt.Intf                   ,
+  FireDAC.Stan.Async                  ,
+  FireDAC.DApt, Data.DB               ,
+  FireDAC.Comp.DataSet                ,
+  FireDAC.Comp.Client                 ;
+
+type TFiltro = class
+    Fusuario_id          : Integer;
+    Fusuario_descricao   : String ;
+    Fusuario_cpf         : String ;
+end;
+
+
+  type TUsuarios = class(TComponent)
+  private
+    { Private declarations }
+    Fusuario_id          : Integer;
+    Fusuario_descricao   : String ;
+    Fusuario_cpf         : String ;
+    Fusuario_email       : String ;
+    Fusuario_senha       : String ;
+  public
+    { Public declarations }
+    property usuario_id       : Integer read Fusuario_id        write Fusuario_id       ;
+    property usuario_descricao: String  read Fusuario_descricao write Fusuario_descricao;
+    property usuario_cpf      : String  read Fusuario_cpf       write Fusuario_cpf      ;
+    property usuario_email    : String  read Fusuario_email     write Fusuario_email    ;
+    property usuario_senha    : String  read Fusuario_senha     write Fusuario_senha    ;
+  end;
+
+  type TListaUsuarios = class(TComponent)
+  private
+  public
+    constructor Create;
+    destructor  Destroy; override;
+  public
+    function  Selecionardados(Busca:TFiltro):TList<TUsuarios>;
+    function  InserirDados   :TJSONString   ;
+    function  AtualizarDados :TJSONString   ;
+  end;
+
+implementation
+
+uses
+  Vcl.Dialogs;
+
+{ TContato }
+
+function TListaUsuarios.AtualizarDados: TJSONString;
+begin
+     try
+        try
+          Result := TJSONString.Create('Dados inserido no banco com sucesso!!!');
+        finally
+        end;
+     except
+       Result := TJSONString.Create('Houve um erro ao tentar inserir os dados no banco!!!');
+     end;
+end;
+
+constructor TListaUsuarios.Create;
+begin
+     FConnFD    := TModelConexaoFiredac.Create;
+end;
+
+destructor TListaUsuarios.Destroy;
+begin
+     FreeAndNil(FConnFD);
+     inherited;
+end;
+
+function TListaUsuarios.InserirDados: TJSONString;
+begin
+     try
+        try
+          Result := TJSONString.Create('Dados inserido no banco com sucesso!!!');
+        finally
+        end;
+     except
+       Result := TJSONString.Create('Houve um erro ao tentar inserir os dados no banco!!!');
+     end;
+end;
+
+function TListaUsuarios.Selecionardados(Busca: TFiltro):TList<TUsuarios>;
+var sSQL   : String;
+var sWhere : String;
+var sAnd   : String;
+var Q      : TFDQuery;
+var U      : TUsuarios;
+begin
+     Result:=nil;
+     try
+         sSQL:=      'Select               ';
+         sSQL:= sSQL+' usuario_id       ,  ';
+         sSQL:= sSQL+' usuario_descricao,  ';
+         sSQL:= sSQL+' usuario_cpf      ,  ';
+         sSQL:= sSQL+' usuario_email    ,  ';
+         sSQL:= sSQL+' usuario_senha       ';
+         sSQL:= sSQL+'from usuarios        ';
+         sAnd:= 'where ';
+         if IsNotEmpty(Busca.Fusuario_id) then
+         begin
+              sWhere:= sAnd+' usuario_id = '+SCod(Busca.Fusuario_id);
+              sAnd  := 'and ';
+              sSQL  := sSQL+sWhere;
+         end;
+         if IsNotEmpty(Busca.Fusuario_descricao) then
+         begin
+              sWhere:= sAnd+' usuario_descricao = '''+Busca.Fusuario_descricao + ''' ';
+              sAnd  := 'and ';
+              sSQL  := sSQL+sWhere;
+         end;
+         if IsNotEmpty(Busca.Fusuario_cpf) then
+         begin
+              sWhere:= sAnd+' usuario_cpf = '''+Busca.Fusuario_cpf + ''' ';
+              sSQL  := sSQL+sWhere;
+         end;
+         sSQL  := sSQL+'order by usuario_id';
+         Q:=TFDQuery.Create(nil);
+         Q.Connection:=FConnFD.FConexao;
+         Q.Open(sSQL);
+         if not Q.IsEmpty then
+         begin
+              Result:=TObjectList<TUsuarios>.Create;
+              U:=TUsuarios.Create(nil);
+              while not Q.eof do
+              begin
+                   U.usuario_id        := Q.FieldByName('usuario_id'       ).AsInteger;
+                   U.usuario_descricao := Q.FieldByName('usuario_descricao').AsString ;
+                   U.usuario_cpf       := Q.FieldByName('usuario_cpf'      ).AsString ;
+                   U.usuario_email     := Q.FieldByName('usuario_email'    ).AsString ;
+                   U.usuario_senha     := Q.FieldByName('usuario_senha'    ).AsString ;
+                   showmessage(u.usuario_descricao);
+                   Result.Add(U);
+                   Q.Next;
+              end;
+              FreeAndNil(U);
+         end;
+         FreeAndNil(Q);
+     finally
+     end;
+end;
+
+end.
+

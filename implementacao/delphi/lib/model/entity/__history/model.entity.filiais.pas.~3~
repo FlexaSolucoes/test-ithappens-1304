@@ -1,0 +1,50 @@
+unit model.entity.filiais;
+
+interface
+
+uses
+  System.SysUtils                     ,
+  System.Classes                      ,
+  System.Json                         ,
+  System.Variants                     ,
+  System.Generics.Collections         ,
+  Generics.Collections                ,
+  Graphics                            ,
+  Controls                            ,
+  StdCtrls                            ,
+  Mask                                ,
+  ExtCtrls                            ;
+
+  type Tfiliais = class
+  private
+    { Private declarations }
+    Ffilial_id        : Integer;
+    Ffilial_codigo    : Integer;
+    Ffilial_descricao : String ;
+    Ffilial_cnpj      : String ;
+    Ffilial_email     : String ;
+    Ffilial_endereco  : String ;
+    Ffilial_bairro    : String ;
+    Ffilial_endercomp : String ;
+    Fcidade_id        : Integer;
+  public
+    { Public declarations }
+    property filial_id        : Integer read Ffilial_id        write Ffilial_id       ;
+    property filial_codigo    : Integer read Ffilial_codigo    write Ffilial_codigo   ;
+    property filial_descricao : String  read Ffilial_descricao write Ffilial_descricao;
+    property filial_cnpj      : String  read Ffilial_cnpj      write Ffilial_cnpj     ;
+    property filial_email     : String  read Ffilial_email     write Ffilial_email    ;
+    property filial_endereco  : String  read Ffilial_endereco  write Ffilial_endereco ;
+    property filial_bairro    : String  read Ffilial_bairro    write Ffilial_bairro   ;
+    property filial_endercomp : String  read Ffilial_endercomp write Ffilial_endercomp;
+    property cidade_id        : Integer read Fcidade_id        write Fcidade_id       ;
+  end;
+
+  type TFiliaisLista = class TObjectList<Tfiliais>
+
+  end;
+
+implementation
+
+end.
+

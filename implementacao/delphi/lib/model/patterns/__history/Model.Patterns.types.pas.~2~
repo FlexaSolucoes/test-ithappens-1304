@@ -1,0 +1,20 @@
+unit Model.Patterns.types;
+
+interface
+type tbuscaType =(
+                  bstNone  ,
+                  bstEstado,
+                  bstCidade,
+                  bstMax   );
+
+    type TDatabaseType = (
+                          tdbMSSQL   ,
+                          tdbOracle  ,
+                          tdbSQLLite ,
+                          tdbMySQL   ,
+                          tdbPostgree);
+
+
+implementation
+
+end.

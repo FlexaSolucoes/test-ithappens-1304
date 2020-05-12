@@ -1,0 +1,78 @@
+unit Model.Conexao.Firedac.Factory;
+
+interface
+
+uses System.StrUtils         ,
+     Model.Conexao.Interfaces,
+     Data.DB                 ,
+     FireDAC.Stan.Intf       ,
+     FireDAC.Stan.Option     ,
+     FireDAC.Stan.Error      ,
+     FireDAC.UI.Intf         ,
+     FireDAC.Phys.Intf       ,
+     FireDAC.Stan.Def        ,
+     FireDAC.Stan.Pool       ,
+     FireDAC.Stan.Async      ,
+     FireDAC.Phys            ,
+     FireDAC.VCLUI.Wait      ,
+     FireDAC.Stan.ExprFuncs  ,
+     FireDAC.Phys.SQLiteDef  ,
+     FireDAC.Phys.SQLite     ,
+     FireDAC.Comp.UI         ,
+     FireDAC.Comp.Client     ,
+     FireDAC.Stan.Param      ,
+     FireDAC.DatS            ,
+     FireDAC.DApt.Intf       ,
+     FireDAC.DApt            ,
+     FireDAC.Comp.DataSet    ;
+
+
+type
+    TModelConexaoFactory = class(TInterfacedObject, IModelConexaoFactory)
+    private
+       FQuery:TFDMemTable;
+    public
+       constructor Create;
+       destructor Destroy;override;
+       class function New:IModelConexaoFactory;
+    public
+       function Connection : IModelConexao;
+       function Query      : IModelQuery;
+    end;
+
+implementation
+
+uses
+    System.sysUtils, Model.Conexao.Firedac;
+
+var sDBName:String;
+
+{ TModelConexaoSQLServer }
+
+function TModelConexaoFactory.Connection: IModelConexao;
+begin
+     Result:=TModelConexaoFiredac.New;
+end;
+
+constructor TModelConexaoFactory.Create;
+begin
+     FQuery:=TFDMemTable.Create(nil);
+end;
+
+destructor TModelConexaoFactory.Destroy;
+begin
+     FreeAndNil(FQuery);
+  inherited;
+end;
+
+class function TModelConexaoFactory.New: IModelConexaoFactory;
+begin
+     Result := Self.Create;
+end;
+
+function TModelConexaoFactory.Query: IModelQuery;
+begin
+
+end;
+
+end.

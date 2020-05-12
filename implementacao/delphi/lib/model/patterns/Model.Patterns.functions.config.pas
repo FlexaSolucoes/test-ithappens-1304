@@ -1,0 +1,627 @@
+unit Model.Patterns.functions.config;
+
+interface
+
+uses SysUtils, Classes, Forms, Windows;
+
+{$REGION 'types'}
+
+type
+  TDecimalMode = (dmFixed, dmRound);
+
+type
+  TForceFormat = record
+    Force: Boolean;
+    FormatInt: string;
+    FormatFlt: string;
+    FormatPer: string;
+    FormatCur: string;
+    FormatDat: string;
+    FormatTim: string;
+    FormatDeT: string;
+    DecimalMode: TDecimalMode;
+  end;
+
+type
+  TFormatMessagesType = (fmtBRA, fmtENG, fmtESP);
+
+type
+  TFormatCaptionsButtons = record
+    caption_end: string;
+    caption_open: string;
+    caption_close: string;
+    caption_save: string;
+    caption_delete: string;
+    caption_edit: string;
+    caption_clear: string;
+    caption_copy: string;
+
+    caption_loader: string;
+    caption_proces: string;
+    caption_filter: string;
+    caption_apply: string;
+    caption_update: string;
+    caption_upgrad: string;
+    caption_print: string;
+    caption_printers: string;
+    caption_ignore: string;
+
+    caption_start: string;
+    caption_stop: string;
+    caption_pause: string;
+
+    caption_next: string;
+    caption_back: string;
+    caption_up: string;
+    caption_down: string;
+    caption_first: string;
+    caption_last: string;
+
+    caption_net_open: string;
+    caption_net_close: string;
+
+    caption_net_new: string;
+    caption_net_del: string;
+    caption_net_put: string;
+    caption_net_get: string;
+
+    caption_connect: string;
+    caption_disconnect: string;
+
+  end;
+
+type
+  TFormatVCLMessagesControls = record
+    caption_default: string;
+  end;
+
+type
+  TFormatMessages = record
+    button_large: TFormatCaptionsButtons;
+    button_small: TFormatCaptionsButtons;
+
+    VCLMessagesControls: TFormatVCLMessagesControls;
+
+  end;
+
+{$ENDREGION}
+{$REGION 'TMonitorRegionalSettings'}
+
+type
+  TMonitorRegionalSettings = class(TThread)
+  private
+    fstop: Boolean;
+    finrun: Boolean;
+  protected
+    procedure Execute; override;
+    constructor Create; reintroduce;
+  public
+    procedure DoStop;
+  public
+    property InRun: Boolean read finrun;
+    // procedure Suspend;reintroduce;
+  end;
+
+{$ENDREGION}
+
+var
+  MonitorRegionalSettings: TMonitorRegionalSettings = nil;
+
+var
+  rss_currencystring: string = 'R$';
+
+var
+  rss_decimalseparator: Char = ',';
+
+var
+  rss_thousandseparator: Char = '.';
+
+var
+  rss_timeamstring: string = 'Manhã';
+
+var
+  rss_timepmstring: string = 'Tarde';
+
+var
+  rss_formatinteger: string = '###,###,##0';
+
+var
+  rss_formatfloat: string = '###,###,##0.00';
+
+var
+  rss_formatmoeda: string = '###,###,##0.00';
+
+var
+  rss_formatpercent: string = '###,###,##0.00';
+
+var
+  rss_sformatinteger: string = '0'; // sem tratamento
+
+var
+  rss_sformatfloat: string = '0.00'; // sem tratamento
+
+var
+  rss_sformatmoeda: string = '0.00'; // sem tratamento
+
+var
+  rss_sformatpercent: string = '0.00'; // sem tratamento
+
+var
+  rss_dateseparator: Char = '/';
+
+var
+  rss_shortdateformat: string = '';
+
+var
+  rss_longdateformat: string = '';
+
+var
+  rss_timeseparator: Char = ':';
+
+var
+  rss_shorttimeformat: string = '';
+
+var
+  rss_longtimeformat: string = '';
+
+var
+  rss_datetimeformat: string = '';
+
+var
+  ForceFormat: TForceFormat;
+
+resourcestring
+
+  err_generate_sequece = 'Erro gerando código sequêncial.';
+  err_deleting_record = 'Erro excluindo registro.';
+  err_finding_record = 'Erro efetuando consulta.';
+  err_insertig_record = 'Erro gravando informações.';
+
+  war_option_disabled = 'Opção desabilitada.';
+
+  msg_confirm_exclusion = 'Deseja realmente excluir ?';
+  msg_foundregistration = 'O nº de código foi criado em outro terminal.'#13'Deseja alternar o código ?';
+
+  msg_alternatecodefor = 'Código alterando para: ''%s''';
+  msg_selectanitem = 'Selecione um Registro.';
+  msg_no_find_record = 'Não localizado.';
+  msg_no_integer = 'O valor ''%s'' não é inteiro.';
+  msg_no_float = 'O valor ''%s'' não é flutuante';
+  msg_no_curryncy = 'O valor ''%s'' não é moeda.';
+  msg_no_date = 'O valor ''%s'' não é data.';
+  msg_no_time = 'O valor ''%s'' não é hora.';
+
+var
+  FormatMessages: TFormatMessages;
+
+var
+  DecimalMode: TDecimalMode = dmFixed;
+
+var
+  CurrencyMode: TDecimalMode = dmRound;
+
+var
+  UseRegionalSettings: procedure() = nil;
+
+procedure DoSetConfigs;
+procedure DoMonitorRegionalSettingsCRun;
+procedure DoMonitorRegionalSettingsCStp;
+procedure DoSetFormatMessagesType(value: TFormatMessagesType);
+procedure DoUseRegionalSettings;
+function ValideDecimalForFormat(Format: string; value: Extended): Extended;
+function ValideCurrencyForFormat(Format: string; value: Extended): Extended;
+
+implementation
+
+procedure DoMonitorRegionalSettingsCRun;
+begin
+  if MonitorRegionalSettings = nil then
+  begin
+    MonitorRegionalSettings := TMonitorRegionalSettings.Create;
+  end;
+
+{$IFDEF SW_UNICODE}
+{$ELSE}
+  MonitorRegionalSettings.Resume;
+{$ENDIF}
+end;
+
+procedure DoMonitorRegionalSettingsCStp;
+begin
+  try
+    if MonitorRegionalSettings = nil then
+    begin
+      MonitorRegionalSettings := TMonitorRegionalSettings.Create;
+    end;
+
+    MonitorRegionalSettings.DoStop;
+  except
+  end;
+
+  DoSetConfigs;
+
+end;
+
+function ValideDecimalForFormat(Format: string; value: Extended): Extended;
+var
+  i, d: Integer;
+var
+  s0, s1, s2: string;
+begin
+  d := 0;
+  for i := Length(Format) downto 1 do
+  begin
+    case Format[i] of
+      '.':
+        Break;
+    else
+      d := d + 1;
+    end;
+  end;
+
+  case DecimalMode of
+    dmFixed:
+      begin
+        s1 := FormatFloat('###,###,##0.00000000', value);
+        s2 := copy(s1, 1, Pos(FormatSettings.DecimalSeparator, s1)) + copy(s1, Pos(FormatSettings.DecimalSeparator, s1) + 1, d);
+      end;
+    dmRound:
+      begin
+        s0 := SysUtils.Format('%%12.%dn', [d]);
+        s2 := Trim(SysUtils.Format(s0, [value]));
+      end;
+  end;
+
+  if not TryStrToFloat(s2, Result) then
+  begin
+    Result := value;
+  end;
+end;
+
+function ValideCurrencyForFormat(Format: string; value: Extended): Extended;
+const
+  ponto = '.';
+var
+  i, d: Integer;
+var
+  s0, s1, s2: string;
+begin
+  d := 0;
+  for i := Length(Format) downto 1 do
+  begin
+    case Format[i] of
+      ponto:
+        Break;
+    else
+      d := d + 1;
+    end;
+  end;
+
+  case CurrencyMode of
+    dmFixed:
+      begin
+        s1 := FormatFloat('###,###,##0.00000000', value);
+        s2 := copy(s1, 1, Pos(FormatSettings.DecimalSeparator, s1)) + copy(s1, Pos(FormatSettings.DecimalSeparator, s1) + 1, d);
+      end;
+    dmRound:
+      begin
+        s0 := SysUtils.Format('%%12.%dn', [d]);
+        s2 := Trim(SysUtils.Format(s0, [value]));
+      end;
+  end;
+
+  s0 := '';
+
+  for i := 1 to Length(s2) do
+  begin
+    case s2[i] of
+      ponto:
+        ;
+    else
+      s0 := s0 + s2[i];
+    end;
+  end;
+
+  if not TryStrToFloat(s0, Result) then
+  begin
+    Result := value;
+  end;
+end;
+
+procedure DoSetFormatMessagesType(value: TFormatMessagesType);
+begin
+  case value of
+    fmtBRA:
+      begin
+        FormatMessages.button_large.caption_end := 'Terminar';
+        FormatMessages.button_small.caption_end := '';
+
+        FormatMessages.button_large.caption_open := 'Abrir';
+        FormatMessages.button_small.caption_open := '';
+
+        FormatMessages.button_large.caption_close := 'Fechar';
+        FormatMessages.button_small.caption_close := '';
+
+        FormatMessages.button_large.caption_save := 'Salvar';
+        FormatMessages.button_small.caption_save := '';
+
+        FormatMessages.button_large.caption_delete := 'Deletar';
+        FormatMessages.button_small.caption_delete := '';
+
+        FormatMessages.button_large.caption_edit := 'Editar';
+        FormatMessages.button_small.caption_edit := '';
+
+        FormatMessages.button_large.caption_clear := 'Limpar';
+        FormatMessages.button_small.caption_clear := '';
+
+        FormatMessages.button_large.caption_copy := 'Cópiar';
+        FormatMessages.button_small.caption_copy := '';
+
+        FormatMessages.button_large.caption_loader := 'Carregar';
+        FormatMessages.button_small.caption_loader := '';
+
+        FormatMessages.button_large.caption_proces := 'Processar';
+        FormatMessages.button_small.caption_proces := '';
+
+        FormatMessages.button_large.caption_filter := 'Filtro';
+        FormatMessages.button_small.caption_filter := '';
+
+        FormatMessages.button_large.caption_apply := 'Aplicar';
+        FormatMessages.button_small.caption_apply := '';
+
+        FormatMessages.button_large.caption_update := 'Atualizar';
+        FormatMessages.button_small.caption_update := '';
+
+        FormatMessages.button_large.caption_upgrad := 'Atualizar';
+        FormatMessages.button_small.caption_upgrad := '';
+
+        FormatMessages.button_large.caption_print := 'Imprimir';
+        FormatMessages.button_small.caption_print := '';
+
+        FormatMessages.button_large.caption_printers := 'Impressoras';
+        FormatMessages.button_small.caption_printers := '';
+
+        FormatMessages.button_large.caption_ignore := 'Ignorar';
+        FormatMessages.button_small.caption_ignore := '';
+
+        FormatMessages.button_large.caption_start := 'Iniciar';
+        FormatMessages.button_small.caption_start := '';
+
+        FormatMessages.button_large.caption_stop := 'Parar';
+        FormatMessages.button_small.caption_stop := '';
+
+        FormatMessages.button_large.caption_pause := 'Pausar';
+        FormatMessages.button_small.caption_pause := '';
+
+        FormatMessages.button_large.caption_next := 'Próximo';
+        FormatMessages.button_small.caption_next := '';
+
+        FormatMessages.button_large.caption_back := 'Voltar';
+        FormatMessages.button_small.caption_back := '';
+
+        FormatMessages.button_large.caption_up := 'Subir';
+        FormatMessages.button_small.caption_up := '';
+
+        FormatMessages.button_large.caption_down := 'Descer';
+        FormatMessages.button_small.caption_down := '';
+
+        FormatMessages.button_large.caption_first := 'Primeiro';
+        FormatMessages.button_small.caption_first := '';
+
+        FormatMessages.button_large.caption_last := '';
+        FormatMessages.button_small.caption_last := 'Ultimo';
+
+        FormatMessages.button_large.caption_connect := 'Conectar';
+        FormatMessages.button_small.caption_connect := '';
+
+        FormatMessages.button_large.caption_disconnect := 'Desconectar';
+        FormatMessages.button_small.caption_disconnect := '';
+
+        FormatMessages.button_large.caption_net_open := 'Conectar';
+        FormatMessages.button_small.caption_net_open := '';
+
+        FormatMessages.button_large.caption_net_close := 'Desconectar';
+        FormatMessages.button_small.caption_net_close := '';
+
+        FormatMessages.button_large.caption_net_new := 'Novo';
+        FormatMessages.button_small.caption_net_new := '';
+
+        FormatMessages.button_large.caption_net_del := 'Remove';
+        FormatMessages.button_small.caption_net_del := '';
+
+        FormatMessages.button_large.caption_net_put := 'Upload';
+        FormatMessages.button_small.caption_net_put := '';
+
+        FormatMessages.button_large.caption_net_get := 'Download';
+        FormatMessages.button_small.caption_net_get := '';
+
+        FormatMessages.VCLMessagesControls.caption_default := 'Default';
+
+      end;
+  end;
+end;
+
+procedure DoUseRegionalSettings;
+begin
+  if Assigned(UseRegionalSettings) then
+  begin
+    UseRegionalSettings;
+  end;
+end;
+
+procedure DoDefaultconfigregions;
+begin
+
+FormatSettings.LongDayNames[01] := 'Domingo'; FormatSettings.ShortDayNames[01] := 'Dom';
+FormatSettings.LongDayNames[02] := 'Segunda'; FormatSettings.ShortDayNames[02] := 'Seg';
+FormatSettings.LongDayNames[03] := 'Terça'  ; FormatSettings.ShortDayNames[03] := 'Ter';
+FormatSettings.LongDayNames[04] := 'Quarta' ; FormatSettings.ShortDayNames[04] := 'Qua';
+FormatSettings.LongDayNames[05] := 'Quinta' ; FormatSettings.ShortDayNames[05] := 'Qui';
+FormatSettings.LongDayNames[06] := 'Sexta'  ; FormatSettings.ShortDayNames[06] := 'Sex';
+FormatSettings.LongDayNames[07] := 'Sábado' ; FormatSettings.ShortDayNames[07] := 'Sáb';
+
+FormatSettings.LongMonthNames[01] := 'Janeiro'  ; FormatSettings.ShortMonthNames[01] := 'Jan';
+FormatSettings.LongMonthNames[02] := 'Fevereiro'; FormatSettings.ShortMonthNames[02] := 'Fev';
+FormatSettings.LongMonthNames[03] := 'Março'    ; FormatSettings.ShortMonthNames[03] := 'Mar';
+FormatSettings.LongMonthNames[04] := 'Abril'    ; FormatSettings.ShortMonthNames[04] := 'Abr';
+FormatSettings.LongMonthNames[05] := 'Maio'     ; FormatSettings.ShortMonthNames[05] := 'Mai';
+FormatSettings.LongMonthNames[06] := 'Junho'    ; FormatSettings.ShortMonthNames[06] := 'Jun';
+FormatSettings.LongMonthNames[07] := 'Julho'    ; FormatSettings.ShortMonthNames[07] := 'Jul';
+FormatSettings.LongMonthNames[08] := 'Agosto'   ; FormatSettings.ShortMonthNames[08] := 'Ago';
+FormatSettings.LongMonthNames[09] := 'Setembro' ; FormatSettings.ShortMonthNames[09] := 'Set';
+FormatSettings.LongMonthNames[10] := 'Outubro'  ; FormatSettings.ShortMonthNames[10] := 'Out';
+FormatSettings.LongMonthNames[11] := 'Novembro' ; FormatSettings.ShortMonthNames[11] := 'Nov';
+FormatSettings.LongMonthNames[12] := 'Dezembro' ; FormatSettings.ShortMonthNames[12] := 'Dez';
+
+FormatSettings.DateSeparator := rss_dateseparator;
+FormatSettings.ShortDateFormat := rss_shortdateformat;
+FormatSettings.LongDateFormat := rss_longdateformat;
+
+FormatSettings.TimeSeparator := rss_timeseparator;
+FormatSettings.ShortTimeFormat := rss_shorttimeformat;
+FormatSettings.LongTimeFormat := rss_longtimeformat;
+
+FormatSettings.Currencystring := rss_currencystring;
+FormatSettings.DecimalSeparator := rss_decimalseparator;
+FormatSettings.ThousandSeparator := rss_thousandseparator;
+FormatSettings.TimeAMstring := rss_timeamstring;
+FormatSettings.TimePMstring := rss_timepmstring;
+end;
+
+procedure ReadOfSettings;
+begin
+  ForceFormat.Force := True;
+  ForceFormat.FormatInt := rss_formatinteger;
+  ForceFormat.FormatFlt := rss_formatfloat;
+  ForceFormat.FormatCur := rss_formatmoeda;
+  ForceFormat.FormatPer := rss_formatpercent;
+  ForceFormat.FormatTim := rss_shorttimeformat;
+  ForceFormat.FormatDat := rss_shortdateformat;
+  ForceFormat.FormatDeT := rss_datetimeformat;
+
+  ForceFormat.DecimalMode := dmFixed;
+end;
+
+{$REGION 'TMonitorRegionalSettings'}
+
+procedure TMonitorRegionalSettings.DoStop;
+begin
+  while InRun do
+  begin
+    fstop := True;
+    Sleep(5);
+  end;
+
+end;
+
+procedure TMonitorRegionalSettings.Execute;
+var
+  i: Integer;
+begin
+  finrun := True;
+  try
+    while Assigned(Application) and (not Application.Terminated) do
+    begin
+      try
+        DoDefaultconfigregions
+      except
+      end;
+
+      for i := 1 to 20 do
+      begin
+        if fstop then
+          Break
+        else
+          Sleep(100);
+      end;
+
+      if fstop then
+        Break;
+
+    end;
+  except
+  end;
+  finrun := False;
+end;
+
+// procedure TMonitorRegionalSettings.Suspend;
+// begin
+// fstop:=true;
+// Sleep(110);
+// //inherited Suspend;
+// end;
+
+constructor TMonitorRegionalSettings.Create;
+begin
+  inherited Create(False);
+end;
+
+{$ENDREGION}
+
+procedure DoSetConfigs;
+
+  procedure setlocate;
+  begin
+    // SetThreadLocale(LANG_ENGLISH);
+    Windows.SetThreadLocale(LANG_PORTUGUESE);
+    SysUtils.GetFormatSettings;
+  end;
+
+begin
+  setlocate;
+
+  ForceFormat.Force := True;
+
+  rss_dateseparator := '/';
+  rss_shortdateformat := Format('dd%smm%syyyy', [rss_dateseparator, rss_dateseparator]);
+  rss_longdateformat := Format('dd%smm%syyyy', [rss_dateseparator, rss_dateseparator]);
+
+  rss_timeseparator := ':';
+  rss_shorttimeformat := Format('hh%smm%sss', [rss_timeseparator, rss_timeseparator]);
+  rss_longtimeformat := Format('hh%smm%sss', [rss_timeseparator, rss_timeseparator]);
+  rss_datetimeformat := Format('%s %s', [rss_shortdateformat, rss_shorttimeformat]);
+
+  DoSetFormatMessagesType(fmtBRA);
+  DoDefaultconfigregions;
+  ReadOfSettings;
+
+end;
+
+procedure DoAllocMemory;
+begin
+  DoMonitorRegionalSettingsCRun;
+
+end;
+
+procedure DoFreeMemory;
+begin
+  if Assigned(MonitorRegionalSettings) then
+  begin
+
+    // {$ifdef SW_UNICODE}
+    // MonitorRegionalSettings.Terminate;
+    // {$else}
+    // MonitorRegionalSettings.DoTerminate;
+    // {$endif}
+    try
+      MonitorRegionalSettings.DoStop;
+      MonitorRegionalSettings.Destroy;
+    except
+    end;
+
+    MonitorRegionalSettings := nil;
+
+  end;
+end;
+
+initialization
+
+DoAllocMemory;
+
+DoSetConfigs;
+
+finalization
+
+DoFreeMemory;
+
+end.

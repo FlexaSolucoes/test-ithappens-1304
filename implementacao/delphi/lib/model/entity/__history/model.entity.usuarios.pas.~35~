@@ -1,0 +1,59 @@
+unit model.entity.usuarios;
+
+interface
+
+uses
+  System.SysUtils                     ,
+  System.Classes                      ,
+  System.Json                         ,
+  System.Variants                     ,
+  System.Generics.Collections         ,
+  Generics.Collections                ,
+  Graphics                            ,
+  Controls                            ,
+  StdCtrls                            ,
+  Mask                                ,
+  ExtCtrls                            ,
+  REST.JSON                           ,
+  Model.Conexao.Firedac               ,
+  Model.Patterns.functions            ,
+  FireDAC.Stan.Intf                   ,
+  FireDAC.Stan.Option                 ,
+  FireDAC.Stan.Param                  ,
+  FireDAC.Stan.Error                  ,
+  FireDAC.DatS                        ,
+  FireDAC.Phys.Intf                   ,
+  FireDAC.DApt.Intf                   ,
+  FireDAC.Stan.Async                  ,
+  FireDAC.DApt, Data.DB               ,
+  FireDAC.Comp.DataSet                ,
+  FireDAC.Comp.Client                 ;
+
+type TFiltro = class
+    Fusuario_id          : Integer;
+    Fusuario_descricao   : String ;
+    Fusuario_cpf         : String ;
+end;
+
+
+  type TUsuarios = class
+  private
+    { Private declarations }
+    Fusuario_id          : Integer;
+    Fusuario_descricao   : String ;
+    Fusuario_cpf         : String ;
+    Fusuario_email       : String ;
+    Fusuario_senha       : String ;
+  public
+    { Public declarations }
+    property usuario_id       : Integer read Fusuario_id        write Fusuario_id       ;
+    property usuario_descricao: String  read Fusuario_descricao write Fusuario_descricao;
+    property usuario_cpf      : String  read Fusuario_cpf       write Fusuario_cpf      ;
+    property usuario_email    : String  read Fusuario_email     write Fusuario_email    ;
+    property usuario_senha    : String  read Fusuario_senha     write Fusuario_senha    ;
+  end;
+
+implementation
+
+end.
+

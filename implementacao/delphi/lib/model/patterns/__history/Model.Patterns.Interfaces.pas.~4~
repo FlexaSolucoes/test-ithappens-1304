@@ -1,0 +1,21 @@
+unit Model.Patterns.Interfaces;
+
+interface
+
+  ICommand = interface
+    ['{46EDD05F-F525-488E-BF46-F006481E6162}']
+    function Execute : ICommand;
+  end;
+
+  IInvoker = interface
+    ['{F6CA4333-11C1-4768-857C-E9B867A19D86}']
+    function Add( Value : ICommand ) : IInvoker;
+    function Execute : IInvoker;
+  end;
+
+
+implementation
+
+
+
+end.

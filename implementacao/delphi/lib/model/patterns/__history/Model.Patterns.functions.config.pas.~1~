@@ -1,0 +1,176 @@
+unit Model.Patterns.functions.config;
+
+interface
+
+uses
+  System.SysUtils                     ,
+  System.Classes                      ,
+  System.Json                         ,
+  System.Variants                     ,
+  System.Generics.Collections         ,
+  Graphics                            ,
+  Controls                            ,
+  StdCtrls                            ,
+  Mask                                ,
+  ExtCtrls                            ,
+  Model.Conexao.Firedac               ,
+  Generics.Collections                ,
+  ormbr.types.blob                    ,
+  ormbr.rest.json                     ,
+  ormbr.factory.interfaces            ,
+  ormbr.factory.firedac               ,
+  ormbr.container.objectset.interfaces,
+  ormbr.container.objectset           ,
+  ormbr.json.utils                    ,
+  ormbr.container.dataset.interfaces  ,
+  ormbr.container.fdmemtable          ,
+  ormbr.dml.generator.absolutedb      ,
+  ormbr.dml.generator.elevatedb       ,
+  ormbr.dml.generator.firebird        ,
+  ormbr.dml.generator.interbase       ,
+  ormbr.dml.generator.mongodb         ,
+  ormbr.dml.generator.mssql           ,
+  ormbr.dml.generator.mysql           ,
+  ormbr.dml.generator.nexusdb         ,
+  ormbr.dml.generator.oracle          ,
+  ormbr.dml.generator.postgresql      ,
+  ormbr.dml.generator.sqlite          ,
+  ormbr.ddl.generator.absolutedb      ,
+  model.entity.ormbr.tipo_respostas_01;
+
+type
+  Ttipo_respostas_01 = class(TComponent)
+  private
+    { Private declarations }
+    FID                       : Integer;
+    Fcodigo_tipo_respostas    : Integer;
+    Ftipo_respostas_item      : Integer;
+    Ftipo_respostas_descricao : String ;
+    Ftipo_respostas_status    : Integer;
+    Ftipo_respostas_abortar   : Integer;
+  private
+    FConnFD                   : TModelConexaoFiredac;
+    FConnORM                  : IDBConnection       ;
+    Ftipo_respostas_01        : model.entity.ormbr.tipo_respostas_01.Ttipo_respostas_01;
+    FContainer                : IContainerObjectSet<model.entity.ormbr.tipo_respostas_01.Ttipo_respostas_01>;
+  private
+    procedure CopiarDadosOrmBr;
+    procedure CarregarDadosOrmBr;
+  public
+    constructor Create;
+    destructor  Destroy; override;
+  public
+    procedure   Limpar                               ;
+    procedure   SelecionardadosNome  (sNome  :String);
+    function    InserirDados   :TJSONString;
+    function    AtualizarDados :TJSONString;
+  public
+    { Public declarations }
+    property ID                       : Integer read FID                       write FID                      ;
+    property codigo_tipo_respostas    : Integer read Fcodigo_tipo_respostas    write Fcodigo_tipo_respostas   ;
+    property tipo_respostas_item      : Integer read Ftipo_respostas_item      write Ftipo_respostas_item     ;
+    property tipo_respostas_descricao : String  read Ftipo_respostas_descricao write Ftipo_respostas_descricao;
+    property tipo_respostas_status    : Integer read Ftipo_respostas_status    write Ftipo_respostas_status   ;
+    property tipo_respostas_abortar   : Integer read Ftipo_respostas_abortar   write Ftipo_respostas_abortar  ;
+  end;
+
+
+implementation
+
+{ TContato }
+
+function Ttipo_respostas_01.AtualizarDados: TJSONString;
+begin
+     try
+        try
+          FContainer.Update(Self.Ftipo_respostas_01);
+          Result := TJSONString.Create('Dados inserido no banco com sucesso!!!');
+        finally
+        end;
+     except
+       Result := TJSONString.Create('Houve um erro ao tentar inserir os dados no banco!!!');
+     end;
+end;
+
+procedure Ttipo_respostas_01.CarregarDadosOrmBr;
+begin
+     FID                       := Ftipo_respostas_01.ID                      ;
+     Fcodigo_tipo_respostas    := Ftipo_respostas_01.codigo_tipo_respostas   ;
+     Ftipo_respostas_item      := Ftipo_respostas_01.tipo_respostas_item     ;
+     Ftipo_respostas_descricao := Ftipo_respostas_01.tipo_respostas_descricao;
+     Ftipo_respostas_status    := Ftipo_respostas_01.tipo_respostas_status   ;
+     Ftipo_respostas_abortar   := Ftipo_respostas_01.tipo_respostas_abortar  ;
+end;
+
+procedure Ttipo_respostas_01.CopiarDadosOrmBr;
+begin
+     Ftipo_respostas_01.ID                       := FID                      ;
+     Ftipo_respostas_01.codigo_tipo_respostas    := Fcodigo_tipo_respostas   ;
+     Ftipo_respostas_01.tipo_respostas_item      := Ftipo_respostas_item     ;
+     Ftipo_respostas_01.tipo_respostas_descricao := Ftipo_respostas_descricao;
+     Ftipo_respostas_01.tipo_respostas_status    := Ftipo_respostas_status   ;
+     Ftipo_respostas_01.tipo_respostas_abortar   := Ftipo_respostas_abortar  ;
+end;
+
+constructor Ttipo_respostas_01.Create;
+begin
+     FConnFD    := TModelConexaoFiredac.Create;
+     FConnORM   := TFactoryFireDAC.Create(FConnFD.Connection, FConnFD.ORMBrDriver );
+
+     Ftipo_respostas_01   := Model.Entity.OrmBr.tipo_respostas_01.Ttipo_respostas_01.Create;
+
+     FContainer := TContainerObjectSet<Model.Entity.OrmBr.tipo_respostas_01.Ttipo_respostas_01>.Create(FConnORM);
+end;
+
+destructor Ttipo_respostas_01.Destroy;
+begin
+     FreeAndNil(FContainer);
+     Ftipo_respostas_01.Destroy;
+     inherited;
+end;
+
+function Ttipo_respostas_01.InserirDados: TJSONString;
+begin
+     try
+        try
+          Self.CopiarDadosOrmBr;
+          FContainer.Insert(Self.Ftipo_respostas_01);
+          Result := TJSONString.Create('Dados inserido no banco com sucesso!!!');
+        finally
+        end;
+     except
+       Result := TJSONString.Create('Houve um erro ao tentar inserir os dados no banco!!!');
+     end;
+end;
+
+procedure Ttipo_respostas_01.Limpar;
+begin
+    FID                       := 00;
+    Fcodigo_tipo_respostas    := 00;
+    Ftipo_respostas_item      := 00;
+    Ftipo_respostas_descricao := '';
+    Ftipo_respostas_status    := 00;
+    Ftipo_respostas_abortar   := 00;
+end;
+
+procedure Ttipo_respostas_01.SelecionardadosNome(sNome: String);
+var L : TObjectList<model.entity.ormBr.tipo_respostas_01.Ttipo_respostas_01>;
+var sWhere   : String;
+var sOrderBy : String;
+begin
+     L := TObjectList<model.entity.ormBr.tipo_respostas_01.Ttipo_respostas_01>.Create;
+     try
+         sWhere   := 'contato_nome = '''+ sNome +''' ';
+         sOrderBy := '';
+         L := FContainer.FindWhere(sWhere,sOrderBy);
+         if (L.Count>0) then
+         begin
+              Ftipo_respostas_01:=L.Items[0];
+              CarregarDadosOrmBr;
+         end;
+     finally
+         L.Free;
+     end;
+end;
+
+end.

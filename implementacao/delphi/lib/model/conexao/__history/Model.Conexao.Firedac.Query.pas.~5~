@@ -1,0 +1,72 @@
+unit Model.Conexao.Firedac.Query;
+
+interface
+
+uses System.StrUtils         ,
+     Model.Conexao.Interfaces,
+     Data.DB                 ,
+     FireDAC.Stan.Intf       ,
+     FireDAC.Stan.Option     ,
+     FireDAC.Stan.Error      ,
+     FireDAC.UI.Intf         ,
+     FireDAC.Phys.Intf       ,
+     FireDAC.Stan.Def        ,
+     FireDAC.Stan.Pool       ,
+     FireDAC.Stan.Async      ,
+     FireDAC.Phys            ,
+     FireDAC.VCLUI.Wait      ,
+     FireDAC.Stan.ExprFuncs  ,
+     FireDAC.Phys.SQLiteDef  ,
+     FireDAC.Phys.SQLite     ,
+     FireDAC.Comp.UI         ,
+     FireDAC.Comp.Client     ,
+     FireDAC.Stan.Param      ,
+     FireDAC.DatS            ,
+     FireDAC.DApt.Intf       ,
+     FireDAC.DApt            ,
+     FireDAC.Comp.DataSet    ;
+
+
+type
+    TModelConexaoFiredacQuery = class(TInterfacedObject, IModelQuery)
+    private
+       FConexao:TFDConnection;
+    public
+       constructor Create;
+       destructor Destroy;override;
+       class function New:IModelConexao;
+    public
+       function Query : TDataSet;
+    end;
+
+implementation
+
+uses
+    System.sysUtils;
+
+var sDBName:String;
+
+{ TModelConexaoSQLServer }
+
+constructor TModelConexaoFiredac.Create;
+begin
+
+end;
+
+destructor TModelConexaoFiredac.Destroy;
+begin
+
+  inherited;
+end;
+
+class function TModelConexaoFiredac.New: IModelConexao;
+begin
+     Result := Self.Create;
+end;
+
+function TModelConexaoFiredac.Query: TDataSet;
+begin
+
+end;
+
+end.

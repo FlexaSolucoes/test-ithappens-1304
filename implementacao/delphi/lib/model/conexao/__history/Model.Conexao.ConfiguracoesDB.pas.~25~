@@ -1,0 +1,109 @@
+unit Model.Conexao.ConfiguracoesDB;
+
+interface
+
+uses
+    System.SysUtils            ,
+    System.StrUtils            ,
+    System.IniFiles            ,
+    System.Generics.Collections,
+    Model.Patterns.types       ,
+    Model.Conexao.Interfaces   ;
+
+
+type
+    TModelConexaoConfig = class(TObject)
+    private
+       FDatabaseType : TDatabaseType;
+       FDriverID     : String       ;
+       FDatabase     : String       ;
+       FServer       : String       ;
+       FUserName     : String       ;
+       FPassword     : String       ;
+    public
+       procedure SetDatabase(const Value: String);
+       procedure SetDriverID(const Value: String);
+       procedure SetPassword(const Value: String);
+       procedure SetServer  (const Value: String);
+       procedure SetUserName(const Value: String);
+    public
+       property DatabaseType : TDatabaseType read FDatabaseType write FDatabaseType;
+       property DriverID     : String        read FDriverID     write SetDriverID  ;
+       property Database     : String        read FDatabase     write SetDatabase  ;
+       property Server       : String        read FServer       write SetServer    ;
+       property UserName     : String        read FUserName     write SetUserName  ;
+       property Password     : String        read FPassword     write SetPassword  ;
+    public
+       constructor Create;
+       destructor Destroy;override;
+       class function New:TModelConexaoConfig;
+    end;
+
+
+implementation
+
+{ TModelConexaoFiredac }
+
+constructor TModelConexaoConfig.Create;
+var xini    : TIniFile;
+begin
+     xini    := TIniFile.Create(ChangeFileExt(ParamStr(0), '.ini'));
+
+     FDriverID := xini.ReadString('ConfiguracaoDB', 'DriverID' , '');
+     FDatabase := xini.ReadString('ConfiguracaoDB', 'Database' , '');
+     FServer   := xini.ReadString('ConfiguracaoDB', 'Server  ' , '');
+     FUserName := xini.ReadString('ConfiguracaoDB', 'UserName' , '');
+     FPassword := xini.ReadString('ConfiguracaoDB', 'Password' , '');
+
+     if FDriverID = '' then FDriverID := 'MSSQL';
+     if FDatabase = '' then FDatabase := 'fiscal';
+     if FServer   = '' then FServer   := 'localhost';
+     if FUserName = '' then FUserName := 'syscpd';
+     if FPassword = '' then FPassword := 'flex@2048';
+
+     xini.ReadString('ConfiguracaoDB', 'DriverID' , FDriverID);
+     xini.ReadString('ConfiguracaoDB', 'Database' , FDatabase);
+     xini.ReadString('ConfiguracaoDB', 'Server  ' , FServer  );
+     xini.ReadString('ConfiguracaoDB', 'UserName' , FUserName);
+     xini.ReadString('ConfiguracaoDB', 'Password' , FPassword);
+
+     xini.Free;
+end;
+
+destructor TModelConexaoConfig.Destroy;
+begin
+
+  inherited;
+end;
+
+class function TModelConexaoConfig.New: TModelConexaoConfig;
+begin
+     Result:=Self.Create;
+end;
+
+procedure TModelConexaoConfig.SetDatabase(const Value: String);
+begin
+     FDatabase := Value;
+end;
+
+procedure TModelConexaoConfig.SetDriverID(const Value: String);
+begin
+     FDriverID := Value;
+end;
+
+procedure TModelConexaoConfig.SetPassword(const Value: String);
+begin
+     FPassword := Value;
+end;
+
+procedure TModelConexaoConfig.SetServer(const Value: String);
+begin
+     FServer := Value;
+end;
+
+procedure TModelConexaoConfig.SetUserName(const Value: String);
+begin
+     FUserName := Value;
+end;
+
+end.

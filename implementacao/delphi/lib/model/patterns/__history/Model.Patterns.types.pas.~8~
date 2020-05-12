@@ -1,0 +1,27 @@
+unit Model.Patterns.types;
+
+interface
+
+    type TDatabaseType = (
+                          tdbMSSQL   ,
+                          tdbOracle  ,
+                          tdbSQLLite ,
+                          tdbMySQL   ,
+                          tdbPostgree,
+                          tdbFirebird);
+
+    type TMensagemTipo = (
+                          tmtNone    ,
+                          tmtEnviada ,
+                          tmtRecebida);
+
+    type TRetorno = record
+      retorno_id       : integer;
+      retorno_cod : integer;
+      retorno_msg : string ;
+    end;
+
+
+implementation
+
+end.

@@ -1,0 +1,126 @@
+unit controller.clientes;
+
+interface
+
+uses
+     System.SysUtils                     ,
+     System.Classes                      ,
+     System.Json                         ,
+     System.Generics.Collections         ,
+     DataSnap.DSProviderDataModuleAdapter,
+     Datasnap.DSServer                   ,
+     Datasnap.DSAuth                     ,
+     REST.JSON                           ,
+     Model.Conexao.Firedac               ,
+     Model.Patterns.Servico              ,
+     Model.Patterns.functions            ,
+     model.entity.Clientes               ;
+
+type
+  TClienteController = class(TDSServerModule)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function Cliente(id:Integer=0):TJSONValue;
+    function updateCliente(Cliente:TJSONObject):TJSONValue;
+    function acceptCliente(Cliente:TJSONObject):TJSONValue;
+    function cancelCliente(id:Integer):TJSONValue;
+  end;
+
+var
+  ClienteController: TClienteController;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+{ TClienteController }
+
+function TClienteController.acceptCliente(Cliente: TJSONObject): TJSONValue;
+var sSQL:String;
+var c:model.entity.clientes.Tclientes;
+begin
+     c:=TJSon.JsonToObject<model.entity.clientes.Tclientes>(Cliente);
+     sSQL:= 'insert into clientes (            ';
+     sSQL:= sSQL+ ' cliente_codigo          , ';
+     sSQL:= sSQL+ ' cliente_nomerzsocial    , ';
+     sSQL:= sSQL+ ' cliente_apelidofantasia , ';
+     sSQL:= sSQL+ ' cliente_cnpjcpf         , ';
+     sSQL:= sSQL+ ' cliente_inscest_cic     , ';
+     sSQL:= sSQL+ ' cliente_email           , ';
+     sSQL:= sSQL+ ' cliente_endereco        , ';
+     sSQL:= sSQL+ ' cliente_bairro          , ';
+     sSQL:= sSQL+ ' cliente_endercomp       , ';
+     sSQL:= sSQL+ ' cliente_cidade_id       ) ';
+     sSQL:= sSQL+ ' VALUES (                  ';
+     sSQL:= sSQL+ ' '   + c.cliente_codigo.ToString +   ' , ';
+     sSQL:= sSQL+ ' ''' + c.cliente_nomerzsocial    + ''' , ';
+     sSQL:= sSQL+ ' ''' + c.cliente_apelidofantasia + ''' , ';
+     sSQL:= sSQL+ ' ''' + c.cliente_cnpjcpf         + ''' , ';
+     sSQL:= sSQL+ ' ''' + c.cliente_inscest_cic     + ''' , ';
+     sSQL:= sSQL+ ' ''' + c.cliente_email           + ''' , ';
+     sSQL:= sSQL+ ' ''' + c.cliente_endereco        + ''' , ';
+     sSQL:= sSQL+ ' ''' + c.cliente_bairro          + ''' , ';
+     sSQL:= sSQL+ ' ''' + c.cliente_endercomp       + ''' , ';
+     sSQL:= sSQL+ ' '   + c.cliente_cidade_id.ToString +    ' )';
+
+     if TModelConexaoFiredac.GetInstance.ExecuteCommand(sSQL) then
+     begin
+          Result:=TJSONString.Create('Registro inserido com sucesso!');
+     end
+     else
+     begin
+          Result:=TJSONString.Create('Falha na inserção do registro!');
+     end;
+end;
+
+function TClienteController.cancelCliente(id: Integer): TJSONValue;
+begin
+     Result:=TJSONString.Create('Não é possivel apagar o registro!');
+end;
+
+function TClienteController.Cliente(id: Integer): TJSONValue;
+var sSQL:String;
+begin
+     sSQL:=      'Select * from clientes ';
+     if IsNotEmpty(id) then
+     begin
+          sSQL  := sSQL+'where cliente_id = '+id.ToString;
+     end;
+     sSQL  := sSQL+'order by cliente_nomerzsocial';
+
+     Result:= TModelPatternsServico.GetInstance.DataSetToJsonArray(TModelConexaoFiredac.GetInstance.ExecuteSelect(sSQL));
+end;
+
+function TClienteController.updateCliente(Cliente: TJSONObject): TJSONValue;
+var sSQL:String;
+var c:model.entity.clientes.Tclientes;
+begin
+     c:=TJSon.JsonToObject<model.entity.clientes.Tclientes>(Cliente);
+     sSQL:= 'update clientes set ';
+     sSQL:= sSQL+ ' cliente_codigo          = '   + c.cliente_codigo.ToString    +   '   ';
+     sSQL:= sSQL+ ' cliente_nomerzsocial    = ''' + c.cliente_nomerzsocial    + ''' , ';
+     sSQL:= sSQL+ ' cliente_apelidofantasia = ''' + c.cliente_apelidofantasia + ''' , ';
+     sSQL:= sSQL+ ' cliente_cnpjcpf         = ''' + c.cliente_cnpjcpf         + ''' , ';
+     sSQL:= sSQL+ ' cliente_inscest_cic     = ''' + c.cliente_inscest_cic     + ''' , ';
+     sSQL:= sSQL+ ' cliente_email           = ''' + c.cliente_email           + ''' , ';
+     sSQL:= sSQL+ ' cliente_endereco        = ''' + c.cliente_endereco        + ''' , ';
+     sSQL:= sSQL+ ' cliente_bairro          = ''' + c.cliente_bairro          + ''' , ';
+     sSQL:= sSQL+ ' cliente_endercomp       = ''' + c.cliente_endercomp       + ''' , ';
+     sSQL:= sSQL+ ' cliente_cidade_id       = '   + c.cliente_cidade_id.ToString +   '   ';
+     sSQL:= sSQL+ ' where cliente_id = '+ c.cliente_ID.ToString;
+
+     if TModelConexaoFiredac.GetInstance.ExecuteCommand(sSQL) then
+     begin
+          Result:=TJSONString.Create('Registro alterado com sucesso!');
+     end
+     else
+     begin
+          Result:=TJSONString.Create('Falha na alteção do registro!');
+     end;
+end;
+
+end.

@@ -1,0 +1,25 @@
+unit Model.Conexao.Interfaces;
+
+interface
+
+uses Data.DB;
+
+type
+   IModelConexao = interface
+     ['{2D4E84D9-2FF6-4B0B-8D0B-84BD4BF58E16}']
+     function Connection : TCustomConnection;
+   end;
+
+   IModelQuery = interface
+     ['{876F2230-F1B8-416E-934E-AC1B4B2BD43E}']
+     function Query : TDataSet;
+   end;
+
+   IModelConexaoFactory = interface
+     ['{7588F668-320A-497F-89C0-E62E0656E55D}']
+     function Connection : TCustomConnection;
+   end;
+
+implementation
+
+end.

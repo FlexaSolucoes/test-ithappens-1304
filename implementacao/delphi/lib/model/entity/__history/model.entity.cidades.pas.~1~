@@ -1,0 +1,38 @@
+unit model.entity.cidades;
+
+interface
+
+uses
+  System.SysUtils                     ,
+  System.Classes                      ,
+  System.Json                         ,
+  System.Variants                     ,
+  System.Generics.Collections         ,
+  Generics.Collections                ,
+  Graphics                            ,
+  Controls                            ,
+  StdCtrls                            ,
+  Mask                                ,
+  ExtCtrls                            ;
+
+  type Tcidades = class
+  private
+    { Private declarations }
+    Fcidade_id          : Integer;
+    Fcidade_descricao   : String ;
+    Fcidade_cpf         : String ;
+    Fcidade_email       : String ;
+    Fcidade_senha       : String ;
+  public
+    { Public declarations }
+    property cidade_id       : Integer read Fcidade_id        write Fcidade_id       ;
+    property cidade_descricao: String  read Fcidade_descricao write Fcidade_descricao;
+    property cidade_cpf      : String  read Fcidade_cpf       write Fcidade_cpf      ;
+    property cidade_email    : String  read Fcidade_email     write Fcidade_email    ;
+    property cidade_senha    : String  read Fcidade_senha     write Fcidade_senha    ;
+  end;
+
+implementation
+
+end.
+

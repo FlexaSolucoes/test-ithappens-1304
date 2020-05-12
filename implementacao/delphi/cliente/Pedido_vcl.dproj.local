@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2020/03/19 18:30:52.000.728,=C:\Users\ruyfl\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2020/05/10 18:35:11.000.308,=C:\Users\ruyfl\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2020/05/10 18:35:53.000.935,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\cliente\uprincipal_vcl.pas</Transaction>
+    <Transaction>2020/05/10 18:36:23.000.371,C:\Users\ruyfl\Documents\Embarcadero\Studio\Projects\Project1.dproj=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\cliente\Pedido_vcl.dproj</Transaction>
+    <Transaction>2020/05/11 15:23:47.595,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\cliente\view\ufrmpedido.pas</Transaction>
+    <Transaction>2020/05/11 15:25:06.575,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\patterns\Model.Patterns.functions.config.pas</Transaction>
+    <Transaction>2020/05/11 15:25:06.595,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\patterns\Model.Patterns.functions.pas</Transaction>
+    <Transaction>2020/05/11 15:25:06.610,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\patterns\Model.Patterns.Servico.pas</Transaction>
+    <Transaction>2020/05/11 15:25:06.620,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\patterns\Model.Patterns.types.pas</Transaction>
+    <Transaction>2020/05/11 15:25:23.159,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\entity\model.entity.cidades.pas</Transaction>
+    <Transaction>2020/05/11 15:25:23.171,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\entity\model.entity.clientes.pas</Transaction>
+    <Transaction>2020/05/11 15:25:23.182,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\entity\model.entity.estados.pas</Transaction>
+    <Transaction>2020/05/11 15:25:23.193,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\entity\model.entity.estoque.pas</Transaction>
+    <Transaction>2020/05/11 15:25:23.205,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\entity\model.entity.filiais.pas</Transaction>
+    <Transaction>2020/05/11 15:25:23.215,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\entity\model.entity.formapagamento.pas</Transaction>
+    <Transaction>2020/05/11 15:25:23.231,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\entity\model.entity.grupo_produto.pas</Transaction>
+    <Transaction>2020/05/11 15:25:23.242,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\entity\model.entity.itenspedido.pas</Transaction>
+    <Transaction>2020/05/11 15:25:23.253,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\entity\model.entity.paises.pas</Transaction>
+    <Transaction>2020/05/11 15:25:23.264,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\entity\model.entity.pedido_pagamentos.pas</Transaction>
+    <Transaction>2020/05/11 15:25:23.276,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\entity\model.entity.pedidoestoque.pas</Transaction>
+    <Transaction>2020/05/11 15:25:23.288,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\entity\model.entity.produtos.pas</Transaction>
+    <Transaction>2020/05/11 15:25:23.300,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\entity\model.entity.tipo_movimento.pas</Transaction>
+    <Transaction>2020/05/11 15:25:23.312,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\entity\model.entity.usuarios.pas</Transaction>
+    <Transaction>2020/05/11 20:18:53.690,=D:\Projetos Ruy\test-ithappen\test-ithappens-1304-master\implementacao\delphi\lib\model\entity\model.entity.retorno.pas</Transaction>
+  </Transactions>
+</BorlandProject>

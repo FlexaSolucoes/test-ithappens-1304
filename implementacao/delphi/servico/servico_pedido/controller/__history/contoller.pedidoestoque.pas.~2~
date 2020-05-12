@@ -1,0 +1,41 @@
+unit contoller.pedidoestoque;
+
+interface
+
+uses
+     System.SysUtils                     ,
+     System.Classes                      ,
+     System.Json                         ,
+     System.Generics.Collections         ,
+     DataSnap.DSProviderDataModuleAdapter,
+     Datasnap.DSServer                   ,
+     Datasnap.DSAuth                     ,
+     REST.JSON                           ,
+     Data.DB                             ,
+     Model.Conexao.Firedac               ,
+     Model.Patterns.Servico              ,
+     Model.Patterns.functions            ,
+     model.entity.pedidoestoque          ;
+
+type
+  TPedidoEstoqueController = class(TDSServerModule)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function Pedido(id:Integer=0):TJSONValue;
+    function updatePedido(Pedido:TJSONObject):TJSONValue;
+    function acceptPedido(Filial:TJSONObject):TJSONValue;
+    function cancelPedido(id:Integer):TJSONValue;
+  end;
+
+var
+  PedidoEstoqueController: TPedidoEstoqueController;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+end.

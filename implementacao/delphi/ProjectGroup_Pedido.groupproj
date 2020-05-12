@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{D3C2F031-4B86-45E7-A563-2A105654F186}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="servico\servico_pedido\servico_pedido.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="cliente\Pedido_vcl.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="servico_pedido">
+        <MSBuild Projects="servico\servico_pedido\servico_pedido.dproj"/>
+    </Target>
+    <Target Name="servico_pedido:Clean">
+        <MSBuild Projects="servico\servico_pedido\servico_pedido.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="servico_pedido:Make">
+        <MSBuild Projects="servico\servico_pedido\servico_pedido.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Pedido_vcl">
+        <MSBuild Projects="cliente\Pedido_vcl.dproj"/>
+    </Target>
+    <Target Name="Pedido_vcl:Clean">
+        <MSBuild Projects="cliente\Pedido_vcl.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Pedido_vcl:Make">
+        <MSBuild Projects="cliente\Pedido_vcl.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="servico_pedido;Pedido_vcl"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="servico_pedido:Clean;Pedido_vcl:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="servico_pedido:Make;Pedido_vcl:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

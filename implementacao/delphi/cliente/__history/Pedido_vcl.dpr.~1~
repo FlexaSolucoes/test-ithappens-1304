@@ -1,0 +1,14 @@
+program Pedido_vcl;
+
+uses
+  Vcl.Forms,
+  uprincipal_vcl in 'uprincipal_vcl.pas' {frmprincipal};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(Tfrmprincipal, frmprincipal);
+  Application.Run;
+end.

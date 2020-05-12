@@ -1,0 +1,160 @@
+unit uDMServer;
+
+interface
+
+uses
+  System.SysUtils          ,
+  System.Classes           ,
+  System.JSON              ,
+  Data.DBXCommon           ,
+  IPPeerServer             ,
+  Datasnap.DSCommonServer  ,
+  Datasnap.DSHTTP          ,
+  Datasnap.DSServer        ,
+  controller.cidades       ,
+  controller.clientes      ,
+  controller.estados       ,
+  controller.filiais       ,
+  controller.formapagamento,
+  controller.grupo_produto ,
+  controller.paises        ,
+  controller.produtos      ,
+  controller.tipo_movimento,
+  controller.usuarios      ,
+  controller.pedidoestoque ;
+
+type
+  TDMServer = class(TDataModule)
+    DSRestServer: TDSServer;
+    DSHTTPRestService: TDSHTTPService;
+    DSServerFilial: TDSServerClass;
+    DSServerCidade: TDSServerClass;
+    DSServerCliente: TDSServerClass;
+    DSServerEstado: TDSServerClass;
+    DSServerFormaPagamento: TDSServerClass;
+    DSServerGrupo_Produto: TDSServerClass;
+    DSServerPais: TDSServerClass;
+    DSServerProduto: TDSServerClass;
+    DSServerMovimento: TDSServerClass;
+    DSServerUsuario: TDSServerClass;
+    DSServerPedido: TDSServerClass;
+    procedure DSServerFilialGetClass(DSServerClass: TDSServerClass;
+      var PersistentClass: TPersistentClass);
+    procedure DSServerCidadeGetClass(DSServerClass: TDSServerClass;
+      var PersistentClass: TPersistentClass);
+    procedure DSServerClienteGetClass(DSServerClass: TDSServerClass;
+      var PersistentClass: TPersistentClass);
+    procedure DSServerEstadoGetClass(DSServerClass: TDSServerClass;
+      var PersistentClass: TPersistentClass);
+    procedure DSServerFormaPagamentoGetClass(DSServerClass: TDSServerClass;
+      var PersistentClass: TPersistentClass);
+    procedure DSServerGrupo_ProdutoGetClass(DSServerClass: TDSServerClass;
+      var PersistentClass: TPersistentClass);
+    procedure DSServerPaisGetClass(DSServerClass: TDSServerClass;
+      var PersistentClass: TPersistentClass);
+    procedure DSServerProdutoGetClass(DSServerClass: TDSServerClass;
+      var PersistentClass: TPersistentClass);
+    procedure DSServerMovimentoGetClass(DSServerClass: TDSServerClass;
+      var PersistentClass: TPersistentClass);
+    procedure DSServerUsuarioGetClass(DSServerClass: TDSServerClass;
+      var PersistentClass: TPersistentClass);
+    procedure DSHTTPRestServiceFormatResult(Sender: TObject;
+      var ResultVal: TJSONValue; const Command: TDBXCommand;
+      var Handled: Boolean);
+    procedure DSServerPedidoGetClass(DSServerClass: TDSServerClass;
+      var PersistentClass: TPersistentClass);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DMServer: TDMServer;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+procedure TDMServer.DSHTTPRestServiceFormatResult(Sender: TObject;
+  var ResultVal: TJSONValue; const Command: TDBXCommand; var Handled: Boolean);
+var
+  Aux: TJSONValue;
+begin
+  Aux := ResultVal;
+  ResultVal := TJSONArray(Aux).Items[0];
+  TJSONArray(Aux).Remove(0);
+  Aux.Free;
+  Handled := True;
+end;
+
+
+procedure TDMServer.DSServerCidadeGetClass(DSServerClass: TDSServerClass;
+  var PersistentClass: TPersistentClass);
+begin
+     PersistentClass:=Controller.cidades.TCidadeController;
+end;
+
+procedure TDMServer.DSServerClienteGetClass(DSServerClass: TDSServerClass;
+  var PersistentClass: TPersistentClass);
+begin
+     PersistentClass:=Controller.clientes.TClienteController;
+end;
+
+procedure TDMServer.DSServerEstadoGetClass(DSServerClass: TDSServerClass;
+  var PersistentClass: TPersistentClass);
+begin
+     PersistentClass:=Controller.estados.TEstadoController;
+end;
+
+procedure TDMServer.DSServerFilialGetClass(DSServerClass: TDSServerClass;
+  var PersistentClass: TPersistentClass);
+begin
+     PersistentClass:=Controller.filiais.TFilialController;
+end;
+
+procedure TDMServer.DSServerFormaPagamentoGetClass(
+  DSServerClass: TDSServerClass; var PersistentClass: TPersistentClass);
+begin
+     PersistentClass:=Controller.formapagamento.TFormaPagamentoController;
+end;
+
+procedure TDMServer.DSServerGrupo_ProdutoGetClass(DSServerClass: TDSServerClass;
+  var PersistentClass: TPersistentClass);
+begin
+     PersistentClass:=Controller.grupo_produto.TGrupoProdutoController;
+end;
+
+procedure TDMServer.DSServerMovimentoGetClass(DSServerClass: TDSServerClass;
+  var PersistentClass: TPersistentClass);
+begin
+     PersistentClass:=Controller.tipo_movimento.TTipoMovimentoController;
+end;
+
+procedure TDMServer.DSServerPaisGetClass(DSServerClass: TDSServerClass;
+  var PersistentClass: TPersistentClass);
+begin
+     PersistentClass:=Controller.paises.TPaisController;
+end;
+
+procedure TDMServer.DSServerPedidoGetClass(DSServerClass: TDSServerClass;
+  var PersistentClass: TPersistentClass);
+begin
+     PersistentClass:=controller.pedidoestoque.TPedidoEstoqueController;
+end;
+
+procedure TDMServer.DSServerProdutoGetClass(DSServerClass: TDSServerClass;
+  var PersistentClass: TPersistentClass);
+begin
+     PersistentClass:=Controller.produtos.TProdutoController;
+end;
+
+procedure TDMServer.DSServerUsuarioGetClass(DSServerClass: TDSServerClass;
+  var PersistentClass: TPersistentClass);
+begin
+     PersistentClass:=Controller.usuarios.TUsuarioController;
+end;
+
+end.

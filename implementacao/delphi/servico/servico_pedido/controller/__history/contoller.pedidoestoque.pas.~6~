@@ -1,0 +1,96 @@
+unit contoller.pedidoestoque;
+
+interface
+
+uses
+     System.SysUtils                     ,
+     System.Classes                      ,
+     System.Json                         ,
+     System.Generics.Collections         ,
+     DataSnap.DSProviderDataModuleAdapter,
+     Datasnap.DSServer                   ,
+     Datasnap.DSAuth                     ,
+     REST.JSON                           ,
+     Data.DB                             ,
+     Model.Conexao.Firedac               ,
+     Model.Patterns.Servico              ,
+     Model.Patterns.functions            ,
+     model.entity.pedidoestoque          ;
+
+type
+  TPedidoEstoqueController = class(TDSServerModule)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function Pedido(id:Integer=0):TJSONValue;
+    function updatePedido(Pedido:TJSONObject):TJSONValue;
+    function acceptPedido(Pedido:TJSONObject):TJSONValue;
+    function cancelPedido(id:Integer):TJSONValue;
+  end;
+
+var
+  PedidoEstoqueController: TPedidoEstoqueController;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+{ TPedidoEstoqueController }
+
+function TPedidoEstoqueController.acceptPedido(Pedido: TJSONObject): TJSONValue;
+var sSQL:String;
+var DS  :TDataSet;
+var p:model.entity.pedidoestoque.Tpedidoestoque;
+begin
+     p:=TJSon.JsonToObject<model.entity.pedidoestoque.Tpedidoestoque>(pedido);
+     sSQL:= 'insert into pedidoestoque    ( ';
+     sSQL:= sSQL+ ' tipomovimento_id      , ':
+     sSQL:= sSQL+ ' filial_id             , ':
+     sSQL:= sSQL+ ' cliente_id            , ':
+     sSQL:= sSQL+ ' pedido_data           , ':
+     sSQL:= sSQL+ ' pedido_valoritens     , ':
+     sSQL:= sSQL+ ' pedido_valordesconto  , ':
+     sSQL:= sSQL+ ' pedido_valortotal     , ':
+     sSQL:= sSQL+ ' pedido_status         ) ':
+     sSQL:= sSQL+ ' VALUES (                 ';
+     sSQL:= sSQL+ ' '   + p.tipomovimento_id.ToString +    ' , ';
+     sSQL:= sSQL+ ' '   + p.filial_id       .ToString +    ' , ';
+     sSQL:= sSQL+ ' '   + p.cliente_id      .ToString +    ' , ';
+     sSQL:= sSQL+ ' ''' + p.pedido_data     .ToString  + ''' , ';
+     sSQL:= sSQL+ ' 0 , ';
+     sSQL:= sSQL+ ' 0 , ';
+     sSQL:= sSQL+ ' 0 , ';
+     sSQL:= sSQL+ ' 1 ) ';
+     sSQL:= sSQL+ ' select @@IDENTITY pedido_id ';
+
+     DS:=TModelConexaoFiredac.GetInstance.ExecuteSelect(sSQL)
+
+     if  then
+     begin
+          Result:=TJSONString.Create('Registro inserido com sucesso!');
+     end
+     else
+     begin
+          Result:=TJSONString.Create('Falha na inserção do registro!');
+     end;
+end;
+
+function TPedidoEstoqueController.cancelPedido(id: Integer): TJSONValue;
+begin
+
+end;
+
+function TPedidoEstoqueController.Pedido(id: Integer): TJSONValue;
+begin
+
+end;
+
+function TPedidoEstoqueController.updatePedido(Pedido: TJSONObject): TJSONValue;
+begin
+
+end;
+
+end.

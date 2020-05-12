@@ -1,0 +1,101 @@
+unit controller.grupo_produto;
+
+interface
+
+uses
+     System.SysUtils                     ,
+     System.Classes                      ,
+     System.Json                         ,
+     System.Generics.Collections         ,
+     DataSnap.DSProviderDataModuleAdapter,
+     Datasnap.DSServer                   ,
+     Datasnap.DSAuth                     ,
+     REST.JSON                           ,
+     Model.Conexao.Firedac               ,
+     Model.Patterns.Servico              ,
+     Model.Patterns.functions            ,
+     model.entity.Grupo_Produto          ;
+
+type
+  TGrupoProdutoController = class(TDataModule)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function Grupo_Produto(id:Integer=0):TJSONValue;
+    function updateGrupo_Produto(Grupo_Produto:TJSONObject):TJSONValue;
+    function acceptGrupo_Produto(Grupo_Produto:TJSONObject):TJSONValue;
+    function cancelGrupo_Produto(id:Integer):TJSONValue;
+  end;
+
+var
+  GrupoProdutoController: TGrupoProdutoController;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+{ TGrupoProdutoController }
+
+function TGrupoProdutoController.acceptGrupo_Produto(
+  Grupo_Produto: TJSONObject): TJSONValue;
+var sSQL:String;
+var g:model.entity.grupo_produto.Tgrupo_produto;
+begin
+     g:=TJSon.JsonToObject<model.entity.grupo_produto.Tgrupo_produto>(grupo_produto);
+     sSQL:= 'insert into grupo_produto (       ';
+     sSQL:= sSQL+ ' grupo_descricao   , ';
+     sSQL:= sSQL+ ' VALUES ('             ;
+     sSQL:= sSQL+ ' ''' + g.grupo_descricao   + ''' ) ';
+
+     if TModelConexaoFiredac.GetInstance.ExecuteCommand(sSQL) then
+     begin
+          Result:=TJSONString.Create('Registro inserido com sucesso!');
+     end
+     else
+     begin
+          Result:=TJSONString.Create('Falha na inserção do registro!');
+     end;
+end;
+
+function TGrupoProdutoController.cancelGrupo_Produto(id: Integer): TJSONValue;
+begin
+     Result:=TJSONString.Create('Não é possivel apagar o registro!');
+end;
+
+function TGrupoProdutoController.Grupo_Produto(id: Integer): TJSONValue;
+var sSQL:String;
+begin
+     sSQL:=      'Select * from grupo_produto ';
+     if IsNotEmpty(id) then
+     begin
+          sSQL  := sSQL+'where grupo_id = '+id.ToString;
+     end;
+     sSQL  := sSQL+'order by grupo_descricao';
+
+     Result:= TModelPatternsServico.GetInstance.DataSetToJsonArray(TModelConexaoFiredac.GetInstance.ExecuteSelect(sSQL));
+end;
+
+function TGrupoProdutoController.updateGrupo_Produto(
+  Grupo_Produto: TJSONObject): TJSONValue;
+var sSQL:String;
+var g:model.entity.grupo_produto.Tgrupo_produto;
+begin
+     g:=TJSon.JsonToObject<model.entity.grupo_produto.Tgrupo_produto>(grupo_produto);
+     sSQL:= 'update grupo_produto set ';
+     sSQL:= sSQL+ ' grupo_descricao   = '+ '''' + g.grupo_descricao   + '''  ';
+     sSQL:= sSQL+ ' where grupo_id = '+ g.grupo_id.ToString;
+
+     if TModelConexaoFiredac.GetInstance.ExecuteCommand(sSQL) then
+     begin
+          Result:=TJSONString.Create('Registro alterado com sucesso!');
+     end
+     else
+     begin
+          Result:=TJSONString.Create('Falha na alteção do registro!');
+     end;
+end;
+
+end.

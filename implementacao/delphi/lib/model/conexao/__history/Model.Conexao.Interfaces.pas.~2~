@@ -1,0 +1,14 @@
+unit Model.Conexao.Interfaces;
+
+interface
+
+uses Data.DB;
+
+type
+   IModelConexao =interface
+       function Connection : TCustomConnection;
+   end;
+
+implementation
+
+end.

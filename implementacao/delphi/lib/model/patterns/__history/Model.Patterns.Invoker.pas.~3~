@@ -1,0 +1,67 @@
+unit Model.Patterns.Invoker;
+
+interface
+
+uses
+  Model.Patterns.Interfaces,
+  System.Generics.Collections;
+
+Type
+  TModelPatternsInvoker = class(TInterfacedObject, IInvoker)
+    private
+      FList : TList<ICommand>;
+    public
+      constructor Create;
+      destructor Destroy; override;
+      class function New : IInvoker;
+      function Add( Value : ICommand ) : iInvoker;
+      function Execute : IInvoker;overload;
+      function Execute(iLote:Integer) : ICommand;overload;
+  end;
+
+implementation
+
+uses
+  System.SysUtils;
+
+{ TModelFiscalNFeInvoker }
+
+function TModelPatternsInvoker.Add(Value: ICommand): IInvoker;
+begin
+  Result := Self;
+  FList.Add(Value);
+end;
+
+constructor TModelPatternsInvoker.Create;
+begin
+  FList := TList<ICommand>.Create;
+end;
+
+destructor TModelPatternsInvoker.Destroy;
+begin
+  FreeAndNil(FList);
+  inherited;
+end;
+
+function TModelPatternsInvoker.Execute(iLote: Integer): ICommand;
+var
+  LCommand : ICommand;
+begin
+  for LCommand in FList do
+    LCommand.Execute(iLote);
+end;
+
+function TModelPatternsInvoker.Execute: IInvoker;
+var
+  LCommand : ICommand;
+begin
+  for LCommand in FList do
+    LCommand.Execute;
+end;
+
+class function TModelPatternsInvoker.New: IInvoker;
+begin
+  Result := Self.Create;
+end;
+
+end.
